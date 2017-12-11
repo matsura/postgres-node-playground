@@ -5,6 +5,11 @@
     "outDir": "./dist",
     "mapRoot": "./dist",
     "sourceRoot": "./server",
-    "sourceMap": true
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "sourceMap": true,
+    "lib": [
+      "es2015"
+    ]
   }
 }

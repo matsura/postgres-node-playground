@@ -14,7 +14,7 @@ describe("Models Author",  () => {
         const author = new Author();
         author.name = "John";
         author.age = 30;
-        author.description = "He is writer";
+        author.description = "He is writers";
 
         const res = await author.save();
         authorObject = res;

@@ -1,27 +1,27 @@
 import { Router, Request, Response } from "express";
-import { Post } from "../../models/post/model";
-import { Author } from "../../models/author/model";
+import { PostRepository } from "../../models/repositories/post.repository";
+import { Author } from '../../models/author.model';
 
 export class PostRouter {
 
-    static routes(): Router {
+    private postRepository: PostRepository = new PostRepository();
+
+    public getRouter(): Router {
         return Router()
             .get("/post", async (request: Request, response: Response) => {
 
-                const posts = await Post.find({}).populate("author").exec();
+                const posts = await this.postRepository.getAll([Author]);
 
-                response.json(posts)
+                response.json(posts);
             })
             .post("/post", async (request: Request, response: Response) => {
 
-                let data = request.body;
-                let author = await Author.findOne().exec();
-
-                data.author = author._id;
-
-                const post = await Post.create(data);
-
-                response.json(post)
+                try {
+                  const post = await this.postRepository.create(request.body);
+                  response.json(post);
+                } catch (e) {
+                  response.json(e);
+                }
             });
     }
 }

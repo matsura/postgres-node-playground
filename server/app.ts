@@ -6,6 +6,7 @@ import * as path from "path";
 import { PostRouter } from "./routes/post/post";
 import { AuthorRouter } from "./routes/author/author";
 import { APIDocsRouter } from "./routes/swagger";
+import { DatabaseService } from './services/database/database.service';
 
 const app: express.Application = express();
 
@@ -28,11 +29,13 @@ app.use((err: Error & { status: number }, request: express.Request, response: ex
     })
 });
 
-app.use("/api", PostRouter.routes());
+app.use("/api", new PostRouter().getRouter());
 app.use("/api", new AuthorRouter().getRouter());
 app.use("/api/swagger", new APIDocsRouter().getRouter());
 app.use("/docs", express.static(path.join(__dirname, './assets/swagger')));
 
 const server: http.Server = app.listen(process.env.PORT || 3000);
+
+DatabaseService.initialize(false);
 
 export { server };
