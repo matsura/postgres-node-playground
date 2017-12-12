@@ -29,7 +29,7 @@ export class AuthorRouter {
      */
     this.router.get("/author", async (request: Request, response: Response) => {
 
-      const authors = await this.authorRepository.getAll();
+      const authors = await this.authorRepository.getAll(0, 0, ["posts"]);
       response.json(authors);
     });
 

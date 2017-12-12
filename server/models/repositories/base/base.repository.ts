@@ -11,16 +11,20 @@ export abstract class BaseRepository<DataType> implements IRepository<DataType> 
     this.model = model;
   }
 
-  public getAll(limit?: number, skip?: number, include: any[] = []): Promise<DataType[] | [DataType[], number]> {
+  public getAll(limit = 0, skip = 0, include: string[] = []): Promise<DataType[] | [DataType[], number]> {
 
     if (limit && skip) {
-      return this.getQueryBuilder()
-        .skip(skip)
-        .take(limit)
-        .getManyAndCount();
+      return this.repository
+        .find({
+          skip,
+          relations: include,
+          take: skip,
+        });
     }
-    return this.getQueryBuilder()
-      .getMany();
+    return this.repository
+      .find({
+        relations: include
+      });
   }
 
   public getById(id: number): Promise<DataType> {

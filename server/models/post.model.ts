@@ -1,4 +1,7 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from "typeorm";
 
 import { Author } from "./author.model";
 
@@ -11,11 +14,20 @@ export class Post {
   @Column("text")
   public title: string;
 
-  @Column("text")
+  @Column({
+    type: "text",
+    nullable: true,
+  })
   public description: string;
 
-  @ManyToOne((type) => Author, (author: Author) => author.posts)
+  @ManyToOne((type) => Author, (author: Author) => author.id)
+  @JoinColumn({
+    name: "authorId",
+  })
   public author: Author;
+
+  @Column("int")
+  public authorId: number;
 
   @CreateDateColumn()
   public createdAt: Date;

@@ -14,6 +14,7 @@
   "scripts": {
     "start": "nodemon",
     "tsc:w": "tsc -w",
+    "migrations:run": "ts-node node_modules/.bin/typeorm migrations:run",
     "lint": "tslint server/**/*.ts --fix",
     "test": "cross-env NODE_ENV=testing && tsc && mocha dist/tests/ --recursive --color --growl --timeout 120000",
     "build": "tsc -p ./prod.tsconfig.json && ncp './server/assets' './dist/assets'",

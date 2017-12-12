@@ -5,14 +5,17 @@
   "username": "postgres",
   "password": "postgres",
   "database": "postgres",
-  "synchronize": true,
+  "synchronize": false,
   "logging": true,
   "entities": [
     "server/models/*.model.ts"
   ],
   "migrations": [
-    "server/migrations/*.migration.ts"
+    "server/migrations/*.ts"
   ],
+  "cli": {
+    "migrationsDir": "server/migrations"
+  },
   "subscribers": [
     "src/subscriber/**/*.ts"
   ]
