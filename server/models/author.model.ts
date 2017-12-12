@@ -1,31 +1,27 @@
-import { Column, CreatedAt, HasMany, Model, Sequelize, Table, UpdatedAt } from "sequelize-typescript";
-
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 import { Post } from "./post.model";
 
-@Table({
-  tableName: "author"
-})
-export class Author extends Model<Author> {
+@Entity()
+export class Author {
 
-  @Column({
-    allowNull: false,
-  })
+  @PrimaryGeneratedColumn()
+  public id: number;
+
+  @Column("text")
   public name: string;
 
-  @Column({
-    allowNull: false,
-  })
+  @Column()
   public age: number;
 
-  @Column
+  @Column("text")
   public description: string;
 
-  @CreatedAt
+  @CreateDateColumn()
   public createdAt: Date;
 
-  @UpdatedAt
+  @UpdateDateColumn()
   public updatedAt: Date;
 
-  @HasMany(() => Post)
+  @OneToMany((type) => Post, (post: Post) => post.author)
   public posts: Post[];
 }

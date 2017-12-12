@@ -1,9 +1,9 @@
-import Bluebird = require("bluebird");
-import { Model } from "sequelize-typescript";
+import { Connection, Repository, SelectQueryBuilder } from "typeorm";
 
 import { IRepository, MatchMode } from "./repository.model";
+import { DatabaseService } from "../../../services/database/database.service";
 
-export abstract class BaseRepository<DataType extends Model<DataType>> implements IRepository<DataType> {
+export abstract class BaseRepository<DataType> implements IRepository<DataType> {
 
   protected model: any;
 
@@ -11,37 +11,71 @@ export abstract class BaseRepository<DataType extends Model<DataType>> implement
     this.model = model;
   }
 
-  public getAll(include: any[] = []): Bluebird<DataType[]> {
-    return this.model.findAll({
-      include,
+  public getAll(limit?: number, skip?: number, include: any[] = []): Promise<DataType[] | [DataType[], number]> {
+
+    if (limit && skip) {
+      return this.getQueryBuilder()
+        .skip(skip)
+        .take(limit)
+        .getManyAndCount();
+    }
+    return this.getQueryBuilder()
+      .getMany();
+  }
+
+  public getById(id: number): Promise<DataType> {
+    return this.repository
+      .findOneById(id);
+  }
+
+  public getByMultiple(search: { [key: string]: any; }, matchMode: MatchMode = MatchMode.And): Promise<DataType[]> {
+    const columns: string[] = Object.keys(search);
+    let queryBuilder: SelectQueryBuilder<any> = this.getQueryBuilder();
+    columns.forEach((column: string, index: number) => {
+      if (index === 0) {
+        queryBuilder = queryBuilder.where(`base.${column} LIKE '%${search[column]}%'`);
+      } else {
+        if (matchMode === MatchMode.And) {
+          queryBuilder = queryBuilder.andWhere(`base.${column} LIKE '%${search[column]}%'`);
+        } else if (matchMode === MatchMode.Or) {
+          queryBuilder = queryBuilder.orWhere(`base.${column} LIKE '%${search[column]}%'`);
+        }
+      }
+    });
+    return queryBuilder.getMany();
+  }
+
+  public create(item: DataType): Promise<DataType> {
+    return this.repository.save(item);
+  }
+
+  public update(item: DataType, id: number): Promise<DataType> {
+    return new Promise((resolve: (result: DataType) => void) => {
+      this.repository.updateById(id, item)
+        .then(() => resolve(item));
     });
   }
 
-  public getById(id: number): Bluebird<DataType> {
-    return this.model.findById(id);
+  public remove(identifier: number): Promise<number> {
+    return this.model.removeById(identifier);
   }
 
-  public getByMultiple(search: { [key: string]: any; }, matchMode?: MatchMode): Bluebird<DataType[]> {
-    return this.model.findOne({ where: search });
+  public count(): Promise<number> {
+    return this.repository.count();
   }
 
-  public create(item: DataType): Bluebird<DataType> {
-    return this.model.create(item);
+  private get database(): Connection {
+    return DatabaseService.getConnection();
   }
 
-  public update(item: DataType, id: number): Bluebird<DataType> {
-    return this.model.update(item, {
-      where: {
-        id,
-      },
-    });
+  private get repository(): Repository<any> {
+    return this.database
+      .getRepository(this.model);
   }
 
-  public remove(identifier: number): Bluebird<number> {
-    return this.model.destroy({
-      where: {
-        id: identifier,
-      },
-    });
+  private getQueryBuilder(alias: string = "base"): SelectQueryBuilder<any> {
+    return this.database
+      .getRepository(this.model)
+      .createQueryBuilder(alias);
   }
 }

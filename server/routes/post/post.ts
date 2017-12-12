@@ -10,7 +10,7 @@ export class PostRouter {
         return Router()
             .get("/post", async (request: Request, response: Response) => {
 
-                const posts = await this.postRepository.getAll([Author]);
+                const posts = await this.postRepository.getAll();
 
                 response.json(posts);
             })

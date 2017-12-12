@@ -1,30 +1,25 @@
-import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Table, UpdatedAt } from "sequelize-typescript";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 import { Author } from "./author.model";
 
-@Table({
-  tableName: "post"
-})
-export class Post extends Model<Post> {
+@Entity()
+export class Post {
 
-  @Column({
-    allowNull: false,
-  })
+  @PrimaryGeneratedColumn()
+  public id: number;
+
+  @Column("text")
   public title: string;
 
-  @Column
+  @Column("text")
   public description: string;
 
-  @ForeignKey(() => Author)
-  @Column
-  public authorId: number;
-
-  @BelongsTo(() => Author)
+  @ManyToOne((type) => Author, (author: Author) => author.posts)
   public author: Author;
 
-  @CreatedAt
+  @CreateDateColumn()
   public createdAt: Date;
 
-  @UpdatedAt
+  @UpdateDateColumn()
   public updatedAt: Date;
 }

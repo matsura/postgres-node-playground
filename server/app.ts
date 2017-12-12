@@ -2,6 +2,7 @@ import * as express from "express";
 import { json, urlencoded } from "body-parser";
 import * as http from "http";
 import * as path from "path";
+import "reflect-metadata";
 
 import { PostRouter } from "./routes/post/post";
 import { AuthorRouter } from "./routes/author/author";
@@ -36,6 +37,6 @@ app.use("/docs", express.static(path.join(__dirname, './assets/swagger')));
 
 const server: http.Server = app.listen(process.env.PORT || 3000);
 
-DatabaseService.initialize(false);
+DatabaseService.initialize();
 
 export { server };

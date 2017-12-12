@@ -1,15 +1,14 @@
-import Bluebird = require("bluebird");
-
 export enum MatchMode {
-  All = "AND",
-  Any = "OR",
+  And = "AND",
+  Or = "OR",
 }
 
 export interface IRepository<DataType> {
-  getAll(): Bluebird<DataType[]>;
-  getById(id: number): Bluebird<DataType>;
-  getByMultiple(search: { [key: string]: any }, matchMode: MatchMode): Bluebird<DataType[]>;
-  create(item: DataType): Bluebird<DataType>;
-  update(item: DataType, id: number): Bluebird<DataType>;
-  remove(identifier: number): Bluebird<number>;
+  getAll(): Promise<DataType[] | [DataType[], number]>;
+  getById(id: number): Promise<DataType>;
+  getByMultiple(search: { [key: string]: any }, matchMode: MatchMode): Promise<DataType[]>;
+  create(item: DataType): Promise<DataType>;
+  update(item: DataType, id: number): Promise<DataType>;
+  remove(identifier: number): Promise<number>;
+  count(): Promise<number>;
 }
