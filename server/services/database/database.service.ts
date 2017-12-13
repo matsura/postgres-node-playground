@@ -7,6 +7,18 @@ export class DatabaseService {
       .then((connection: Connection) => this.connection = connection);
   }
 
+  public static initializeAsync(): Promise<void> {
+    return new Promise((resolve: () => void) => {
+
+      createConnection()
+        .then((connection: Connection) => {
+
+          this.connection = connection;
+          resolve();
+        });
+    });
+  }
+
   public static getConnection(): Connection {
 
     if (!this.connection) {

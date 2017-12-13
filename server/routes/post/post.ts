@@ -1,27 +1,29 @@
 import { Router, Request, Response } from "express";
-import { PostRepository } from "../../models/repositories/post.repository";
-import { Author } from '../../models/author.model';
+import { Post } from '../../models/post.model';
+import { getConnection, Repository } from 'typeorm';
 
 export class PostRouter {
 
-    private postRepository: PostRepository = new PostRepository();
+  private postRepository: Repository<Post> = getConnection().getRepository(Post);
 
-    public getRouter(): Router {
-        return Router()
-            .get("/post", async (request: Request, response: Response) => {
+  public getRouter(): Router {
+      return Router()
+          .get("/post", async (request: Request, response: Response) => {
 
-                const posts = await this.postRepository.getAll();
+              response.json(await this.postRepository.find());
+          })
+          .get("/post/:id", async (request: Request, response: Response) => {
 
-                response.json(posts);
-            })
-            .post("/post", async (request: Request, response: Response) => {
+            response.json(await this.postRepository.findOneById(request.params.id));
+          })
+          .post("/post", async (request: Request, response: Response) => {
 
-                try {
-                  const post = await this.postRepository.create(request.body);
-                  response.json(post);
-                } catch (e) {
-                  response.json(e);
-                }
-            });
-    }
+              try {
+                const post = await this.postRepository.save(request.body);
+                response.json(post);
+              } catch (e) {
+                response.json(e);
+              }
+          });
+  }
 }
