@@ -11,7 +11,7 @@ export class ParameterType {
   public id: number;
 
   @Column("text", {
-    nullable: false
+    nullable: false,
   })
   public enum: string;
 
@@ -25,8 +25,8 @@ export class ParameterType {
   public parameters: Parameter[];
 
   @CreateDateColumn()
-  public createdAt: Date;
+  public created_at: Date;
 
   @UpdateDateColumn()
-  public updatedAt: Date;
+  public updated_at: Date;
 }

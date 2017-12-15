@@ -61,8 +61,8 @@ export class BimModelProperty {
   public value_unit: string;
 
   @CreateDateColumn()
-  public createdAt: Date;
+  public created_at: Date;
 
   @UpdateDateColumn()
-  public updatedAt: Date;
+  public updated_at: Date;
 }

@@ -11,9 +11,6 @@ export class ParameterProperty {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  @Column("text")
-  public title: string;
-
   @Column({
     type: "text",
   })
@@ -66,8 +63,8 @@ export class ParameterProperty {
   public parameter_id: number;
 
   @CreateDateColumn()
-  public createdAt: Date;
+  public created_at: Date;
 
   @UpdateDateColumn()
-  public updatedAt: Date;
+  public updated_at: Date;
 }

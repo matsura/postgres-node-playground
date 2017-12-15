@@ -1,5 +1,5 @@
 import {
-  Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn,
+  Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { ParameterType } from './parameter-type.model';
@@ -22,11 +22,14 @@ export class Parameter {
   public active: boolean;
 
   @ManyToOne((type) => ParameterType, (parameterType: ParameterType) => parameterType.id)
+  @JoinColumn({
+    name: "type",
+  })
   public type: ParameterType;
 
   @CreateDateColumn()
-  public createdAt: Date;
+  public created_at: Date;
 
   @UpdateDateColumn()
-  public updatedAt: Date;
+  public updated_at: Date;
 }

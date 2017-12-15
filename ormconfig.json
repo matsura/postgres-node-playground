@@ -5,6 +5,8 @@
   "username": "postgres",
   "password": "postgres",
   "database": "postgres",
+  "extra": {},
+  "schema": "ocean",
   "synchronize": false,
   "logging": true,
   "entities": [

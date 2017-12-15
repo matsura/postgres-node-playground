@@ -1,5 +1,13 @@
 import { Connection, createConnection, getConnection } from "typeorm";
 
+export interface IConnectionOptions {
+  host: string;
+  user: string;
+  password: string;
+  database: string;
+  schema: string;
+}
+
 export class DatabaseService {
 
   public static initialize(): void {
@@ -27,5 +35,8 @@ export class DatabaseService {
     return this.connection;
   }
 
+  public static connectionOptions(): IConnectionOptions {
+    return require('../../../pg-connection.json');
+  }
   private static connection: Connection;
 }

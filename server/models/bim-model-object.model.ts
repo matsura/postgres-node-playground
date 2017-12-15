@@ -1,5 +1,5 @@
 import {
-  Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn,
+  Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { BimModelObjectType } from './bim-model-object-type.model';
@@ -18,14 +18,20 @@ export class BimModelObject {
   public guid: string;
 
   @ManyToOne((type) => BimModelObjectType, (bimModelObject: BimModelObjectType) => bimModelObject.id)
+  @JoinColumn({
+    name: "type",
+  })
   public type: BimModelObjectType;
 
   @ManyToOne((category) => BimModelCategory, (bimModelCategory: BimModelCategory) => bimModelCategory.id)
+  @JoinColumn({
+    name: "category",
+  })
   public category: BimModelCategory;
 
   @CreateDateColumn()
-  public createdAt: Date;
+  public created_at: Date;
 
   @UpdateDateColumn()
-  public updatedAt: Date;
+  public updated_at: Date;
 }

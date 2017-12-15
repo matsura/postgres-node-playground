@@ -2,12 +2,14 @@ import { Router, Request, Response } from "express";
 import { EntityManager, getConnection, getManager, Repository } from 'typeorm';
 import { Author } from '../../models/author.model';
 import { Post } from '../../models/post.model';
+import { BimModelObject } from '../../models/bim-model-object.model';
 
 export class AuthorRouter {
 
   private authorRepository: Repository<Author> = getConnection().getRepository(Author);
   private postRepository: Repository<Post> = getConnection().getRepository(Post);
   private entityManager: EntityManager = getManager();
+  private bimModelObjectRepo: Repository<BimModelObject> = getConnection().getRepository(BimModelObject);
   private router: Router = Router();
 
   public getRouter(): Router {
@@ -32,10 +34,7 @@ export class AuthorRouter {
      */
     this.router.get("/author", async (request: Request, response: Response) => {
 
-      const authors = await this.authorRepository.find({
-        relations: ["posts"],
-      });
-      response.json(authors);
+      response.json(await this.bimModelObjectRepo.find());
     });
 
     this.router.get("/authorbyname/:name", async (request: Request, response: Response) => {

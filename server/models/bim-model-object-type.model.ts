@@ -29,8 +29,8 @@ export class BimModelObjectType {
   public bimModelObjects: BimModelObject[];
 
   @CreateDateColumn()
-  public createdAt: Date;
+  public created_at: Date;
 
   @UpdateDateColumn()
-  public updatedAt: Date;
+  public updated_at: Date;
 }
