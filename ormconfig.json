@@ -5,7 +5,9 @@
   "username": "postgres",
   "password": "postgres",
   "database": "postgres",
-  "extra": {},
+  "extra": {
+    "AUTOCOMMIT": "OFF"
+  },
   "schema": "ocean",
   "synchronize": false,
   "logging": true,
